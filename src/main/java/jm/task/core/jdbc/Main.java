@@ -7,8 +7,4 @@ public class Main {
     }
 }
 
-class ChekingConnection{
-    private void trueConnection(){
 
-    }
-}
