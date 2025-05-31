@@ -8,7 +8,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public UserDaoHibernateImpl() {
 
     }
-
+//Это не трогаем, пока что
 
     @Override
     public void createUsersTable() {
