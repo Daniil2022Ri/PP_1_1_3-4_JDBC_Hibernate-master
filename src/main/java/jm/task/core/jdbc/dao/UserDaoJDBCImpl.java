@@ -13,27 +13,27 @@ import java.util.List;
 public class UserDaoJDBCImpl implements UserDao {
 
 
-
     public UserDaoJDBCImpl() {
 
     }
 
+    @Override
     public void createUsersTable() {
         String sql = "CREATE TABLE IF NOT EXISTS users " +
                 "(id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), last_name VARCHAR(255), age INT)";
 
         try (Connection connect = Util.getConnection();
-                Statement statement = connect.createStatement()) {
+             Statement statement = connect.createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             System.out.println("Проблемы создания таблицы");
         }
     }
 
-    // Удаление таблицы User(ов) – не должно приводить к исключению, если таблицы не существует
+    @Override
     public void dropUsersTable() {
         try (Connection connect = Util.getConnection();
-                Statement statement = connect.createStatement()) {
+             Statement statement = connect.createStatement()) {
             statement.executeUpdate("DROP TABLE IF EXISTS users");
         } catch (SQLException e) {
             System.out.println("Ошибка метода dropUsersTable");
@@ -41,10 +41,10 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    // Добавление User в таблицу
+    @Override
     public void saveUser(String name, String lastName, byte age) {
         try (Connection connect = Util.getConnection();
-                PreparedStatement pstm = connect.prepareStatement("INSERT INTO users (name, last_name, age) VALUES (?, ?, ?)")) {
+             PreparedStatement pstm = connect.prepareStatement("INSERT INTO users (name, last_name, age) VALUES (?, ?, ?)")) {
             pstm.setString(1, name);
             pstm.setString(2, lastName);
             pstm.setByte(3, age);
@@ -54,10 +54,10 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    // Удаление User из таблицы ( по id )
+    @Override
     public void removeUserById(long id) {
         try (Connection connect = Util.getConnection();
-                PreparedStatement pstm = connect.prepareStatement("DELETE FROM users WHERE id = ?")) {
+             PreparedStatement pstm = connect.prepareStatement("DELETE FROM users WHERE id = ?")) {
             pstm.setLong(1, id);
             pstm.executeUpdate();
         } catch (SQLException e) {
@@ -66,18 +66,23 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    // Получение всех User(ов) из таблицы
+    @Override
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
 
         try (Connection connect = Util.getConnection();
              ResultSet resultSet = connect.createStatement().executeQuery("SELECT * FROM users")) {
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 User user = new User(resultSet.getString("name"),
                         resultSet.getString("last_name"), resultSet.getByte("age"));
                 user.setId(resultSet.getLong("id"));
                 users.add(user);
             }
+            StringBuilder out = new StringBuilder("Users:/n");
+            for(User user : users){
+                out.append(user.toString()).append("/n");
+            }
+            System.out.println(out.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -85,27 +90,27 @@ public class UserDaoJDBCImpl implements UserDao {
         return users;
     }
 
-    // Очистка содержания таблицы
+    @Override
     public void cleanUsersTable() {
         try (Connection connect = Util.getConnection();
-                Statement statement = connect.createStatement()) {
+             Statement statement = connect.createStatement()) {
             statement.executeUpdate("TRUNCATE TABLE users");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void ChekingTableMSQL(){     //Просто для себя
-        try(Connection connection = Util.getConnection();
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SHOW TABLES")){
+    public void ChekingTableMSQL() {     //Просто для себя
+        try (Connection connection = Util.getConnection();
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("SHOW TABLES")) {
 
-                System.out.println("Таблицы в базе данных:");
-                while (rs.next()) {
-                    System.out.println(rs.getString(1));
-                }
-            } catch (SQLException e) {
-            System.out.println("Что-то пошло не так при запросе таблицы");
-        }
+            System.out.println("Все Таблицы в базе данных:");
+            while (rs.next()) {
+                System.out.println(rs.getString(1));
+            }
+        } catch (SQLException e) {
+            System.out.println("При запросе таблиц произошла ошибка");
         }
     }
+}

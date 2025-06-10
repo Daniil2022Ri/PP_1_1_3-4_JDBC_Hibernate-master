@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     public void saveUser(String name, String lastName, byte age) {
         userDao.saveUser(name , lastName, age);
-        System.out.println("Сохранение " + name + " " + lastName + " " + age);
+        System.out.println("Пользователь c именем: " + name + " добавлен в таблицу!");
     }
 
     public void removeUserById(long id) {
@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getAllUsers() {
         List<User> users =  userDao.getAllUsers();
-        for (User user : users) {
-            System.out.println(user);
+        for(User user : users){
+            System.out.println(user.toString());
         }
         return users;
     }
