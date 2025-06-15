@@ -13,10 +13,6 @@ import java.util.List;
 public class UserDaoJDBCImpl implements UserDao {
 
 
-    public UserDaoJDBCImpl() {
-
-    }
-
     @Override
     public void createUsersTable() {
         String sql = "CREATE TABLE IF NOT EXISTS users " +
@@ -25,6 +21,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connect = Util.getConnection();
              Statement statement = connect.createStatement()) {
             statement.executeUpdate(sql);
+            System.out.println("Таблица JDBC Создана");
         } catch (SQLException e) {
             System.out.println("Проблемы создания таблицы");
         }

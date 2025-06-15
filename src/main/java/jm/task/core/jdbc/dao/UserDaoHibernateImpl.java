@@ -14,14 +14,12 @@ public class UserDaoHibernateImpl implements UserDao {
 
 
 
-
-    User user = new User();
     @Override
     public void createUsersTable() {
         try (Session session = Util.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             transaction.commit();
-            System.out.println("Таблица создана");
+            System.out.println("Таблица Hibernate создана");
         } catch (Exception e) {
             System.out.println("Ошибка при создании таблицы");
             e.printStackTrace();
@@ -43,9 +41,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        user.setName(name);
-        user.setLastName(lastName);
-        user.setAge(age);
+        User user = new User(name , lastName , age);
         try(Session session = Util.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             session.save(user);
