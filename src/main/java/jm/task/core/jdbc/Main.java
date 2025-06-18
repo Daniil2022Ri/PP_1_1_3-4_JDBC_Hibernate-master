@@ -15,7 +15,7 @@ public class Main {
     private static UserService userService;
     public static void main(String[] args) {
 
-        UserServiceImpl userService = new UserServiceImpl();
+        UserServiceImpl userService = new UserServiceImpl(); //Hibernate
 
         userService.createUsersTable();
         userService.saveUser("Daniil" , "JDBC - Hibernate" , (byte) 25);

@@ -13,14 +13,15 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     //JDBC
-    public UserServiceImpl(){
-         this.userDao = new UserDaoJDBCImpl();
-    }
+    // public UserServiceImpl(){
+    //     this.userDao = new UserDaoJDBCImpl();
+    //}
 
     //Hibernate
-    //public UserServiceImpl(){
-    //    this.userDao = new UserDaoHibernateImpl();   Если хотим Hibernate
-    // }
+    public UserServiceImpl(){
+        this.userDao = new UserDaoHibernateImpl();
+    }
+
 
     public void createUsersTable() {
         userDao.createUsersTable();
