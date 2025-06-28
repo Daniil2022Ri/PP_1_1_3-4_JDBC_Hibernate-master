@@ -28,8 +28,6 @@ public class Util {
         return connect;
     }
 
-    //Конфигурация Hibernate
-
     public static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory(){
@@ -54,8 +52,8 @@ public class Util {
                             .applySettings(configuration.getProperties())
                             .build();
 
-                    sessionFactory = configuration.buildSessionFactory(serviceRegistry); //Инициализация
-                    System.out.println("Соединение установленно с базой Hibernate через");
+                    sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+                    System.out.println("Соединение установленно с базой Hibernate");
                 } catch (Exception e) {
                     System.out.println("Ошибка при создании SessionFactory");
                     e.printStackTrace();

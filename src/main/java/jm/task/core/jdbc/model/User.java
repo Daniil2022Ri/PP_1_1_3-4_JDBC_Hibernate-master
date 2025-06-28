@@ -19,7 +19,7 @@ public class User {
     @Column(name = "age")
     private Byte age;
 
-    public User() {
+    public User(){
 
     }
 

@@ -1,24 +1,30 @@
 package jm.task.core.jdbc.dao;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
+import javax.persistence.Query;
+
 public class UserDaoHibernateImpl implements UserDao {
-//Это не трогаем, пока что
-
-
 
     @Override
     public void createUsersTable() {
         try (Session session = Util.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             transaction.commit();
+            session.beginTransaction();
+            String sql = "CREATE TABLE IF NOT EXISTS users " +
+                    "(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                    "name VARCHAR(50) NOT NULL, lastName VARCHAR(50) NOT NULL, " +
+                    "age TINYINT(2) NOT NULL)";
+
+            Query query = session.createSQLQuery(sql).addEntity(User.class);
+            query.executeUpdate();
+            session.getTransaction().commit();
+
             System.out.println("Таблица Hibernate создана");
         } catch (Exception e) {
             System.out.println("Ошибка при создании таблицы");
@@ -41,9 +47,12 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        User user = new User(name , lastName , age);
         try(Session session = Util.getSessionFactory().openSession()) {
+            User user = new User(name , lastName , age);
             Transaction transaction = session.beginTransaction();
+            user.setName(name);
+            user.setLastName(lastName);
+            user.setAge(age);
             session.save(user);
             transaction.commit();
             System.out.println("Пользователь " + name + " Сохранен");
@@ -73,22 +82,9 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-
-        List<User> users = new ArrayList<>();
         try( Session session = Util.getSessionFactory().openSession()){
-            users = session.createQuery("from User" , User.class).list();
-
-            StringBuilder builder = new StringBuilder();
-            builder.append("Спосок всех Пользователей: ");
-            for(User user:users){
-                builder.append(user.toString()).append("/n");
-            }
-            System.out.println(users);
-        }catch (Exception e){
-            System.out.println("Не удалось вывести всех пользователей");
-            e.printStackTrace();
+           return session.createQuery("from User" , User.class).list();
         }
-        return users;
     }
 
     @Override

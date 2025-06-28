@@ -1,21 +1,15 @@
 package jm.task.core.jdbc;
 
-
-import jm.task.core.jdbc.dao.UserDao;
-import jm.task.core.jdbc.dao.UserDaoHibernateImpl;
-import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
-import jm.task.core.jdbc.util.Util;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+
 
 public class Main {
     private static UserService userService;
     public static void main(String[] args) {
 
-        UserServiceImpl userService = new UserServiceImpl(); //Hibernate
+        UserServiceImpl userService = new UserServiceImpl();
 
         userService.createUsersTable();
         userService.saveUser("Daniil" , "JDBC - Hibernate" , (byte) 25);
