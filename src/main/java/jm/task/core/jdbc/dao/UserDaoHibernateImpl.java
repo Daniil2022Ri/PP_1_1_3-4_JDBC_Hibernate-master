@@ -29,7 +29,9 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Ошибка при создании таблицы");
             e.printStackTrace();
-        }
+        }final{
+            //close session!
+            }
     }
 
     @Override
@@ -42,7 +44,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Ошибка при удалении таблицы");
             e.printStackTrace();
-        }
+        }//final session.close()
     }
 
     @Override
@@ -59,7 +61,7 @@ public class UserDaoHibernateImpl implements UserDao {
         }catch (Exception saveExeption){
              System.out.println("Ошибка при сохранении пользователя ");
              saveExeption.printStackTrace();
-        }
+        }//final session.close()
     }
 
     @Override
@@ -77,14 +79,14 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Ошибка при удалении пользователя по ID");
             e.printStackTrace();
-        }
+        }//final session close()
     }
 
     @Override
     public List<User> getAllUsers() {
         try( Session session = Util.getSessionFactory().openSession()){
            return session.createQuery("from User" , User.class).list();
-        }
+        }//catch and  final session.close()
     }
 
     @Override
@@ -98,5 +100,5 @@ public class UserDaoHibernateImpl implements UserDao {
             System.out.println("Не удалось удалить таблицу");
             e.printStackTrace();
         }
-    }
+    }//final session.close()
 }
